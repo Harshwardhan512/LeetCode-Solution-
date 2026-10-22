@@ -23,4 +23,22 @@ public:
         while (!q.empty()) {
             int levelSize = q.size();
             unsigned long long first = q.front().second;  // leftmost index of this level
-            unsigned long long
+            unsigned long long last = 0;
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode* node = q.front().first;
+                unsigned long long cur = q.front().second - first;  // shift to avoid overflow
+                q.pop();
+                last = cur;
+
+                if (node->left)  q.push({node->left, 2 * cur});
+                if (node->right) q.push({node->right, 2 * cur + 1});
+            }
+
+            unsigned long long width = last + 1;
+            if (width > maxWidth) maxWidth = width;
+        }
+
+        return (int)maxWidth;
+    }
+};
